@@ -1,6 +1,9 @@
 # installer-elasticsearch
 Installer for Elasticsearch
 
+## System requirements
+- CentOS 7.2
+
 ## Usage
 
 ```
