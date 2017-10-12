@@ -17,7 +17,13 @@ sudo systemctl start elasticsearch
 sudo systemctl enable elasticsearch
 
 # to use japanese
-sudo /usr/share/elasticsearch/bin/elasticsearch-plugin install analysis-kuromoji
-sudo /usr/share/elasticsearch/bin/elasticsearch-plugin list | grep analysis-kuromoji
+if [ `sudo /usr/share/elasticsearch/bin/elasticsearch-plugin list | grep analysis-kuromoji > /dev/null 2>&1; echo $?` == 0 ]; then
+  echo '(skipping...)analysis-kuromoji is already installed.'
+else
+  sudo /usr/share/elasticsearch/bin/elasticsearch-plugin install analysis-kuromoji
+  sudo /usr/share/elasticsearch/bin/elasticsearch-plugin list | grep analysis-kuromoji
+fi
+
+sleep 5s
 
 curl http://127.0.0.1:9200
