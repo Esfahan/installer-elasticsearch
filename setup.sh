@@ -16,13 +16,21 @@ sudo yum -y install elasticsearch
 sudo systemctl start elasticsearch
 sudo systemctl enable elasticsearch
 
+
+# Install plugins
+plugin_installer() {
+  PLUGIN_BIN='/usr/share/elasticsearch/bin/elasticsearch-plugin'
+  PLUGIN_NAME=$1
+  if [ `sudo "${PLUGIN_BIN}" list | grep "${PLUGIN_NAME}" > /dev/null 2>&1; echo $?` == 0 ]; then
+    echo "(skipping...)${PLUGIN_NAME} is already installed."
+  else
+    sudo "${PLUGIN_BIN}" install "${PLUGIN_NAME}"
+    sudo "${PLUGIN_BIN}" list | grep "${PLUGIN_NAME}"
+  fi
+}
+
 # to use japanese
-if [ `sudo /usr/share/elasticsearch/bin/elasticsearch-plugin list | grep analysis-kuromoji > /dev/null 2>&1; echo $?` == 0 ]; then
-  echo '(skipping...)analysis-kuromoji is already installed.'
-else
-  sudo /usr/share/elasticsearch/bin/elasticsearch-plugin install analysis-kuromoji
-  sudo /usr/share/elasticsearch/bin/elasticsearch-plugin list | grep analysis-kuromoji
-fi
+plugin_installer analysis-kuromoji
 
 sleep 5s
 
